@@ -1,0 +1,75 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "f1334ad70ea887a36dcb95a6f05b9831",
+    "entities": [
+      {
+        "tableName": "student",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `age` INTEGER NOT NULL, `name` TEXT, `chinese` INTEGER, `english` INTEGER, `math` INTEGER, `sport` INTEGER, `physical` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "age",
+            "columnName": "age",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "studentName",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "course.chinese",
+            "columnName": "chinese",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "course.english",
+            "columnName": "english",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "course.math",
+            "columnName": "math",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "course.sport",
+            "columnName": "sport",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "course.physical",
+            "columnName": "physical",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"f1334ad70ea887a36dcb95a6f05b9831\")"
+    ]
+  }
+}

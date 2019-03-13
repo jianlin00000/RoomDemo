@@ -51,8 +51,8 @@ dependencies {
     //测试支持
     androidTestImplementation 'android.arch.persistence.room:testing:1.1.1'
 
-    debugImplementation ('com.github.whataa:pandora:v1.3.2'){
-        exclude group:'com.android.support'
-    }
-//    releaseImplementation 'com.github.whataa:pandora-no-op:v1.3.2'
+    //无需root的数据库查看工具
+//    debugImplementation ('com.github.whataa:pandora:v1.3.2'){
+//        exclude group:'com.android.support'
+//    }
 }

@@ -15,7 +15,7 @@ import com.demo.db.model.Student;
  *@desc:
  */
 //entities表示要包含哪些表；version为数据库的版本，数据库升级时更改；exportSchema是否导出数据库结构，默认为true,
-@Database(entities = {Student.class}, version = 1 /*,exportSchema = false*/)
+@Database(entities = {Student.class}, version = 3 /*,exportSchema = false*/)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract StudentDao getStudentDao();
@@ -29,7 +29,7 @@ public abstract class AppDatabase extends RoomDatabase {
         private static final AppDatabase instance= Room.databaseBuilder(MyApplication.getContext(), AppDatabase.class, "data")
                                                        // .allowMainThreadQueries()   //设置允许在主线程进行数据库操作，默认不允许
                                                        // .fallbackToDestructiveMigration()  //设置数据库升级的时候清除之前的所有数据                                                       .addMigrations(MIGRATION_2_3)
-                                                      //  .addMigrations(MIGRATION_1_2) //升级数据库
+                                                        .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_1_3) //升级数据库
                                                        .build();
     }
 
@@ -42,7 +42,7 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             //向student表中添加一个sport字段
-            database.execSQL("ALTER TABLE student ADD COLUMN sport TEXT");
+            database.execSQL("ALTER TABLE student ADD COLUMN sport INTEGER");
         }
     };
 
@@ -53,7 +53,7 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             //向student表中添加一个physical字段
-            database.execSQL("ALTER TABLE student ADD COLUMN physical TEXT");
+            database.execSQL("ALTER TABLE student ADD COLUMN physical INTEGER");
         }
     };
 
@@ -63,10 +63,16 @@ public abstract class AppDatabase extends RoomDatabase {
     static final Migration MIGRATION_1_3 = new Migration(1, 3) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            //向student表中添加一个sport字段
-            database.execSQL("ALTER TABLE student ADD COLUMN sport TEXT");
-            //向student表中添加一个physical字段
-            database.execSQL("ALTER TABLE student ADD COLUMN physical TEXT");
+            //创建新表
+            database.execSQL("CREATE TABLE IF NOT EXISTS student_new(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                                     "age INTEGER NOT NULL,name TEXT,chinese INTEGER,english INTEGER,math INTEGER,sport INTEGER,physical INTEGER)");
+            //备份数据
+            database.execSQL("INSERT INTO student_new(id,age,name,chinese,english,math) SELECT id,age,name,chinese,english,math FROM student");
+            //删除旧表
+            database.execSQL("DROP TABLE student");
+            //重命名表
+            database.execSQL("ALTER TABLE student_new RENAME TO student");
+
         }
     };
 }
